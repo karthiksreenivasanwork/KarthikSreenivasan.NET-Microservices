@@ -41,4 +41,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+/*
+* Stage In-Memory database data for our platform service.
+*/
+PrepDb.PrepPopulation(app);
+
 app.Run();
+
+

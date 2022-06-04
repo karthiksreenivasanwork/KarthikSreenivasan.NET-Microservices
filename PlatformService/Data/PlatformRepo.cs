@@ -21,6 +21,8 @@ namespace PlatformService.Data
             {
                 throw new ArgumentNullException(nameof(plat));
             }
+
+            _context.PlatForms.Add(plat);
         }
 
         public IEnumerable<Platform> GetAllPlatforms()

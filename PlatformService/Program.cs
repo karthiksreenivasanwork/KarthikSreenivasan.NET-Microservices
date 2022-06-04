@@ -11,10 +11,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 /*
+* Service Configuration
+-----------------------
+
 * Adding an In-Memory database.
 */
 builder.Services.AddDbContext<AppDbContext>(opt =>
  opt.UseInMemoryDatabase("InMem"));
+
+/*
+* Map the interface and the concrete implementation of the same.
+* Hence if the caller asks for the interface, we provide the concrete class.
+*/
+builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
+
 
 var app = builder.Build();
 

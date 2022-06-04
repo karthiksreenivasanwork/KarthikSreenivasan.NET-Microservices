@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PlatformService.Data;
 using PlatformService.Dtos;
+using PlatformService.Models;
 
 namespace PlatformService.Controllers
 {
@@ -36,8 +37,40 @@ namespace PlatformService.Controllers
         {
             Console.WriteLine("--> Getting Platforms...");
 
-            var platformItem = _repository.GetAllPlatforms();
-            return Ok(_mapper.Map<IEnumerable<PlatformReadDto>>(platformItem));
+            var platformItem = this._repository.GetAllPlatforms();
+            return Ok(this._mapper.Map<IEnumerable<PlatformReadDto>>(platformItem));
+        }
+
+        [HttpGet("{id}", Name = "GetPlaformById")]
+        public ActionResult<PlatformReadDto> GetPlaformById(int id)
+        {
+            var platformItem = this._repository.GetPlatformById(id);
+            if (platformItem != null)
+                return Ok(this._mapper.Map<PlatformReadDto>(platformItem));
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto platformCreateDto)
+        {
+            /**
+            * The mapping is taking place using the following code in PlatformsProfile class
+            * CreateMap<PlatformCreateDto, Platform>();
+            **/
+            var platformModel = this._mapper.Map<Platform>(platformCreateDto);
+            this._repository.CreatePlatform(platformModel);
+            this._repository.SaveChanges();
+
+            var platformReadDto = this._mapper.Map<PlatformReadDto>(platformModel);
+            /*
+            * nameof(GetPlaformById): This will use the GetPlaformById endpoint to create
+            * a location callback to this item back to the caller.
+            * This is a Rest API standard.
+            * Additionally we pass the ID and the created object reference back to the
+            * caller.
+            */
+            return CreatedAtRoute(nameof(GetPlaformById), new { id = platformReadDto.Id }, platformReadDto);
         }
     }
 }

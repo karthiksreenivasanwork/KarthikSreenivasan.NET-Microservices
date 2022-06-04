@@ -25,6 +25,11 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 */
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
 
+/*
+*  Register the Automapper for dependency injection.
+*/
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 var app = builder.Build();
 

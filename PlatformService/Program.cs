@@ -42,7 +42,23 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+/*
+* Microsoft.AspNetCore.Routing.EndpointMiddleware 
+* will execute the Endpoint associated with the current request.
+*/
+app.UseRouting();
+/*
+* Mandatory for UseAuthorization method to appear in this sequence.
+* Dotnet Framework:  The call to UseAuthorization should appear betw
+* een app.UseRouting() and app.UseEndpoints(..) for authorization to 
+* be correctly evaluated.
+ed
+*/
 app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.MapControllers();
 

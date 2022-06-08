@@ -1,6 +1,6 @@
 # .Net Microservices - Development in progress
 
-- Based on the guidance from Les Jackson, I am developing this .Net Microservices project using the following technology stack.
+- Based on the guidance from Les Jackson (details below), I am developing this .Net Microservices project using the following technology stack.
 - .Net Microservices using net6.0, Docker Desktop, Kubernetes, RabbitMQ, and Grpc.
 
 # Credits - .NET Microservices by Les Jackson

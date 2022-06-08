@@ -1,35 +1,35 @@
-# Kubernetes configuration for Platform Service for pod creation
-# --------------------------------------------------------------
+# Kubernetes configuration for Command Service for pod creation
+# -------------------------------------------------------------
 
 # Pod configuration to create "Pod" to hold the container service inside Kubernetes.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: platforms-depl
+  name: commands-depl
 spec:
   replicas: 1 # Defines the number of docker containers indicating horizontal scaling.
   selector:
     matchLabels:
-      app: platformservice
+      app: commandservice
   template:
     metadata:
       labels:
-        app: platformservice
+        app: commandservice
     spec:
       containers:
-        - name: platformservice
-          image: karthiksreenivasan/platformservice:latest
+        - name: commandservice
+          image: karthiksreenivasan/commandservice:latest
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: platforms-clusterip-srv
+  name: commands-clusterip-srv
 spec:
     type: ClusterIP
     selector:
-      app: platformservice
+      app: commandservice
     ports: 
-      - name: platformservice
+      - name: commandservice
         protocol: TCP
         port: 80
         targetPort: 80

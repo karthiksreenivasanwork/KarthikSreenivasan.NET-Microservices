@@ -1,5 +1,6 @@
 using PlatformService.Data;
 using Microsoft.EntityFrameworkCore;
+using PlatformService.SyncDataServices.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,13 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 * Hence if the caller asks for the interface, we provide the concrete class.
 */
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
+/*
+* HTTP Client Factory
+* Hence, when we ask for ICommandDataClient, we will get HttpCOmmandDataClient.
+* This service registration is to support dependency injection.
+* Example: We are injecting this in PlatformsController.
+*/
+builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
 
 /*
 *  Register the Automapper for dependency injection.
@@ -40,7 +48,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 /*
 * Microsoft.AspNetCore.Routing.EndpointMiddleware 
@@ -66,6 +74,7 @@ app.MapControllers();
 * Stage In-Memory database data for our platform service.
 */
 PrepDb.PrepPopulation(app);
+Console.WriteLine($"--> CommandService Endpoint {app.Configuration["CommandService"]}");
 
 app.Run();
 

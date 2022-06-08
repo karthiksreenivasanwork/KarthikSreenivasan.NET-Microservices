@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlatformService.Data;
 using PlatformService.Dtos;
 using PlatformService.Models;
+using PlatformService.SyncDataServices.Http;
 
 namespace PlatformService.Controllers
 {
@@ -20,16 +21,22 @@ namespace PlatformService.Controllers
     {
         private readonly IPlatformRepo _repository;
         private readonly IMapper _mapper;
+        private readonly ICommandDataClient _commandDataClient;
 
         /// <summary>
         /// Constructor dependency injection pattern
         /// </summary>
         /// <param name="repository">PlatformService.Data.IPlatformRepo</param>
         /// <param name="mapper">AutoMapper.IMapper</param>
-        public PlatformsController(IPlatformRepo repository, IMapper mapper)
+        /// <param name="commandDataClient"></param>
+        public PlatformsController(
+            IPlatformRepo repository,
+            IMapper mapper,
+            ICommandDataClient commandDataClient)
         {
-            _repository = repository;
-            _mapper = mapper;
+            this._repository = repository;
+            this._mapper = mapper;
+            this._commandDataClient = commandDataClient;
         }
 
         [HttpGet]
@@ -52,7 +59,7 @@ namespace PlatformService.Controllers
         }
 
         [HttpPost]
-        public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto platformCreateDto)
+        public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto platformCreateDto)
         {
             /**
             * The mapping is taking place using the following code in PlatformsProfile class
@@ -63,6 +70,15 @@ namespace PlatformService.Controllers
             this._repository.SaveChanges();
 
             var platformReadDto = this._mapper.Map<PlatformReadDto>(platformModel);
+
+            try
+            {
+                await _commandDataClient.SendPlatformToCommand(platformReadDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"--> Could not send synchronously: {ex.Message}");
+            }
             /*
             * nameof(GetPlaformById): This will use the GetPlaformById endpoint to create
             * a location callback to this item back to the caller.

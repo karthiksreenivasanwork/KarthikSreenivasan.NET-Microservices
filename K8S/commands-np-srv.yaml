@@ -1,0 +1,19 @@
+# Kubernetes configuration for Command Service to expose the pod via node port
+# -----------------------------------------------------------------------------
+
+# Service configuration to create "Node Port" to expose the container in the Pod managed by Kubernetes.
+apiVersion: v1
+kind: Service
+metadata:
+    name: commandservice-srv
+spec:
+    type: NodePort
+    selector:
+        app: commandservice
+    ports:
+        - name: commandservice #Not mandatory. More useful if there are 2 or more.
+          protocol: TCP
+          port: 80
+          targetPort: 80
+
+

@@ -14,6 +14,10 @@
 - **Backend:** Web API using .Net 6.0.
 - **In-Memory Database:** Microsoft.EntityFrameworkCore.
 - **Container creation and management:** Docker Desktop with Kubernetes.
+  - Kubernetes
+    - Load Balancer: NGINX Ingress Controller
+      - NGINX Ingress Controller for Docker Desktop : https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
+      - !['Ingress nginx' initialized in 'Docker Desktop'](/gitimages/KarthikSreenivasan.NET-Microservices_Ingress_NGINX_Controller_In_Docker_Desktop.png)
 
 ## My LinkedIn Profile | Profile Name: karthiksreenivasan
 

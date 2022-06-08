@@ -25,11 +25,11 @@ kind: Service
 metadata:
   name: platforms-clusterip-srv
 spec:
-    type: ClusterIP
-    selector:
-      app: platformservice
-    ports: 
-      - name: platformservice
-        protocol: TCP
-        port: 80
-        targetPort: 80
+  type: ClusterIP
+  selector:
+    app: platformservice
+  ports:
+  - name: platformservice
+    protocol: TCP
+    port: 80
+    targetPort: 80

@@ -4,21 +4,36 @@ using PlatformService.SyncDataServices.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+IConfiguration _config = builder.Configuration;
+IWebHostEnvironment _env = builder.Environment;
 
+
+// Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-/*
-* Service Configuration
------------------------
+Console.WriteLine($"This is the database connection string: {_config.GetConnectionString("PlatformsConn")}");
 
-* Adding an In-Memory database.
-*/
-builder.Services.AddDbContext<AppDbContext>(opt =>
- opt.UseInMemoryDatabase("InMem"));
+if(_env.IsProduction())
+{
+    Console.WriteLine("--> Using SqlServer Db");
+    builder.Services.AddDbContext<AppDbContext>(opt =>
+        opt.UseSqlServer(_config.GetConnectionString("PlatformsConn"))
+    );
+}
+else
+{
+    Console.WriteLine("--> Using InMem Db");
+    /*
+    * Service Configuration
+    -----------------------
+    * Adding an In-Memory database.
+    */
+    builder.Services.AddDbContext<AppDbContext>(opt =>
+        opt.UseInMemoryDatabase("InMem"));
+}
 
 /*
 * Map the interface and the concrete implementation of the same.

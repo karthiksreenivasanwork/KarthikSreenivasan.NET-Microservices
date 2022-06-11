@@ -1,15 +1,17 @@
 # Load balancer and API gateway configuration managed by ingress-nginx controller
+# This contains the routing configuration for our microservices via ingress-nginx
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-srv
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:
-   - host: acme.com # - means an Array
-     http:
+    - host: acme.com # - means an Array
+      http:
         paths:
           - path: /api/platforms #Defines a single route from ingress to platform service
             pathType: Prefix

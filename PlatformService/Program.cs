@@ -14,9 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-Console.WriteLine($"This is the database connection string: {_config.GetConnectionString("PlatformsConn")}");
+Console.WriteLine($"Database connection string used: {_config.GetConnectionString("PlatformsConn")}");
 
-if(_env.IsProduction())
+if (_env.IsProduction())
 {
     Console.WriteLine("--> Using SqlServer Db");
     builder.Services.AddDbContext<AppDbContext>(opt =>
@@ -63,6 +63,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+/*
+* Since we are not using HTTPS implementation for this project
+* the usage of UseHttpsRedirection is not required.
+*/
 //app.UseHttpsRedirection();
 
 /*
@@ -88,7 +92,7 @@ app.MapControllers();
 /*
 * Stage In-Memory database data for our platform service.
 */
-PrepDb.PrepPopulation(app);
+PrepDb.PrepPopulation(app, _env.IsProduction());
 Console.WriteLine($"--> CommandService Endpoint {app.Configuration["CommandService"]}");
 
 app.Run();
